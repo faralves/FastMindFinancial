@@ -1,14 +1,14 @@
-Afim de facilitar os testes foi incluso no projeo o Swagger, então ao executar a aplicação na url, pode deixar por exemplo: http://localhost:65479/swagger/
+Afim de facilitar os testes foi incluso no projeo o Swagger, então ao executar a aplicação, alterar a url, pode deixar por exemplo: http://localhost:65479/swagger/
 Deixe apenas o http://localhost:porta/swagger/
 
 Incluso também uma aplicação de teste com XUnit para cobertura dos testes.
 
-No projeto FastMindFinancial, deve se alterar no arquivo "appsettings.json" a string de conexão para criar o Banco e as tabelas
+No projeto FastMindFinancial, deve se alterar a string de conexão no arquivo "appsettings.json" para criar o Banco e as tabelas
 
 No Banco de dados a api irá criar uma nova database e uma tabela, a database é FastMindFinancialApp e a tabela é PedidoCredito que contém os dados da solicitação 
 PedidoCredito = {Id, TipoCredito, TipoCalculoPeriodo, ValorCredito, QuantidadeParcelas, DataPrimeiroVencimento, ValorTotalComJuros, ValorJuros}
 
-Segue exemplo do Json para consulta via postMan, inserir o Json abaixo no body, podendo no tipoCredito inserir o valor dele como inteiro ou a string, seguir seu enum:
+Segue exemplo do Json para consulta via postMan, inserir o Json abaixo no body, no campo tipoCredito pode ser inserido o valor dele como inteiro ou a string, pois é um tipo Enum, segue seu enum:
 
 CreditoConsignado = 1,
 CreditoDireto = 2,
@@ -32,7 +32,7 @@ CreditoImobiliario = 9
   "dataPrimeiroVencimento": "2020-04-25"
 }
 
-O Retorno quando cair nas condições que deve negar o financiamento, devolve um badRequest como sendo uma nova exceção e no message do catch devolve o motivo da negativa.
+O Retorno quando cair nas condições que deve negar o financiamento, devolve um badRequest contendo uma nova exceção e no message do catch devolve o motivo da negativa.
 Caso de sucesso devolve o Json abaixo:
 {
   "successo": true,
