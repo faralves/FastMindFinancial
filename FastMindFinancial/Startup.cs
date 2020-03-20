@@ -12,17 +12,21 @@ using AutoMapper;
 using FastMindFinancial.Model;
 using FastMindFinancial.AppService;
 using FastMindFinancial.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
 
 namespace FastMindFinancial
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
-               .AddJsonFile("appsettings.Development.json", true)
-               .AddEnvironmentVariables();
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
 
             Configuration = builder.Build();
         }
@@ -44,6 +48,31 @@ namespace FastMindFinancial
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1",
+                    new Info
+                    {
+                        Title = "Financiamentos",
+                        Version = "v1",
+                        Description = "Teste de para aplicação de Financiamentos",
+                        Contact = new Contact
+                        {
+                            Name = "Fernando Augusto Ribeiro Alves",
+                            Url = "https://github.com/faralves/FastMindFinancial"
+                        }
+                    });
+
+                string caminhoAplicacao =
+                    PlatformServices.Default.Application.ApplicationBasePath;
+                string nomeAplicacao =
+                    PlatformServices.Default.Application.ApplicationName;
+                string caminhoXmlDoc =
+                    Path.Combine(caminhoAplicacao, $"{nomeAplicacao}.xml");
+
+                c.IncludeXmlComments(caminhoXmlDoc);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider services)
@@ -56,6 +85,13 @@ namespace FastMindFinancial
             app.UseMvc();
 
             SeedData.SeedDatabase(services.GetRequiredService<FastMindFinancialContext>());
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json",
+                    "Financiamentos");
+            });
         }
     }
 }

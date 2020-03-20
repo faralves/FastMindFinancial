@@ -1,3 +1,8 @@
+Afim de facilitar os testes foi incluso no projeo o Swagger, então ao executar a aplicação na url, pode deixar por exemplo: http://localhost:65479/swagger/
+Deixe apenas o http://localhost:porta/swagger/
+
+Incluso também uma aplicação de teste com XUnit para cobertura dos testes.
+
 No projeto FastMindFinancial, deve se alterar no arquivo "appsettings.json" a string de conexão para criar o Banco e as tabelas
 
 No Banco de dados a api irá criar uma nova database e uma tabela, a database é FastMindFinancialApp e a tabela é PedidoCredito que contém os dados da solicitação 
@@ -13,20 +18,28 @@ CreditoImobiliario = 9
 
 
 {
-  "tipoCredito": "CreditoPessoaFisica",
-  "valorCredito": 50000.89,
-  "quantidadeParcelas": 15,
+  "tipoCredito": "CreditoConsignado",
+  "valorCredito": 60000.00,
+  "quantidadeParcelas": 30,
   "dataPrimeiroVencimento": "2020-04-25"
 }
 
 
 {
-  "tipoCredito": 3,
-  "valorCredito": 50000.89,
-  "quantidadeParcelas": 15,
+  "tipoCredito": 1,
+  "valorCredito": 60000.00,
+  "quantidadeParcelas": 30,
   "dataPrimeiroVencimento": "2020-04-25"
 }
 
+O Retorno quando cair nas condições que deve negar o financiamento, devolve um badRequest como sendo uma nova exceção e no message do catch devolve o motivo da negativa.
+Caso de sucesso devolve o Json abaixo:
+{
+  "successo": true,
+  "mensagem": "Aprovado",
+  "valorTotalComJuros": 69746.6,
+  "valorJuros": 9746.6
+}
 
 Para o Teste do Banco de Dados os scripts para serem executados no BD estão na pasta "virtual do VS" (Testes Banco de Dados).
 1 -FastMindFinancial_Creates.sql
